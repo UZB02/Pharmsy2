@@ -8,15 +8,23 @@
       <a href="" class="breadcrumb--active">Dashboard</a>
     </div>
     <!-- END: Breadcrumb -->
-    <!-- Begin tranlate -->
-   <div class="translate">
-     <select name="" id="" class="p-1 rounded-xl cursor-pointer outline-none bg-dark-1 text-gray-200 mr-2">
-      <option value="UZ">UZ</option>
-      <option value="RU">RU</option>
-      <option value="EN">EN</option>
-    </select>
-   </div>
-    <!-- End tranlate -->
+    <!-- Begin change Lang -->
+    <div>
+      <div class="langBar" @click="toggleLangItem">
+        <div class="bg-blue-400 p-2 rounded-md flex items-center gap-2">
+          <img :src="selectedFlag.img" alt="" class="w-10 h-7 object-cover cursor-pointer rounded-md">
+          <!-- <h1 class="text-gray-500 text-xl font-bold">{{ selectedFlag.name }}</h1> -->
+        </div>
+      </div>
+      <div class="absolute langItem bg-white" v-show="showLangItem">
+        <div v-for="flag in data.flag" :key="flag.name" @click="changeLang(flag.name)"
+          class="flex rounded-md p-2 bg-red-200 items-center cursor-pointer gap-2">
+          <img :src="flag.img" alt="" class="w-10 h-7 object-cover cursor-pointer rounded-md">
+          <h1 class="text-dark-800 text-md font-bold">{{ flag.name }}</h1>
+        </div>
+      </div>
+    </div>
+    <!-- END change Lang -->
     <!-- BEGIN: Search -->
     <div class="intro-x relative mr-3 sm:mr-6">
       <div class="search hidden sm:block">
@@ -174,7 +182,6 @@ export default defineComponent({
       localStorage.removeItem('token')
       router.push('/login')
     }
-
     const hideSearchDropdown = () => {
       searchDropdown.value = false
     }
@@ -185,6 +192,53 @@ export default defineComponent({
       hideSearchDropdown,
       loginpushpage
     }
+  },
+  data() {
+    return {
+      data: {
+        active: "Uz",
+        flag: [
+          {
+            name: "Uz",
+            img: "https://i.pinimg.com/originals/31/59/7f/31597f5024d357ed5cbac66f4bd61d3b.png",
+          },
+          {
+            name: "Ru",
+            img: "https://wikiflag.ru/wp-content/uploads/2022/03/1.jpg",
+          },
+          {
+            name: "En",
+            img: "https://media.baamboozle.com/uploads/images/41367/1593085639_60643",
+          },
+        ],
+      },
+      showLangItem: false,
+      selectedFlag: {},
+    };
+  },
+  mounted() {
+    this.selectedFlag = this.data.flag.find((flag) => flag.name === this.data.active);
+  },
+  methods: {
+    toggleLangItem() {
+      this.showLangItem = !this.showLangItem
+    },
+    changeLang(name) {
+      this.data.active = name
+      this.selectedFlag = this.data.flag.find((flag) => flag.name === name)
+      this.showLangItem = false
+    }
   }
 })
 </script>
+
+<style scoped>
+svg {
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+svg:hover {
+  transform: scale(1.05);
+}
+</style>

@@ -656,6 +656,12 @@ const modal = ref(false)
 const selectedId = ref(null)
 const EditModalOpend = ref(false)
 const eId = ref(null)
+const error = reactive({
+  name: null,
+  amount: null,
+  barcode: null,
+  expired_date: null
+})
 const searchKeyword = ref('')
 const categories = ref({})
 const typeInputValue = reactive({
@@ -749,7 +755,9 @@ const addNewProducts = event => {
       headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token')
       }
-    })
+    }).catch(e => {
+        console.log(e.response.data.errors.name[0]);
+      })
     .then(res => {
       Swal.fire({
         position: 'top-center',
